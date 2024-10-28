@@ -267,3 +267,99 @@ namespace System.Excepts
         }
     }
 }
+
+namespace System.Excepts
+{
+    public static class Except<E> where E : Exception
+    {
+        public static void Check(bool ok)
+        {
+            if (!ok)
+            {
+                // https://stackoverflow.com/questions/31348525/create-instance-of-a-parameterized-generic-object-with-all-parameters-set-to-nul
+
+                var nullParameters = typeof(E).GetConstructors().Single().GetParameters().Select(p => (object)null).ToArray();
+
+                throw (E)Activator.CreateInstance(typeof(E), nullParameters);
+            }
+        }
+
+        public static void Check(bool ok, Exception exception)
+        {
+            if (!ok)
+            {
+                throw exception;
+            }
+        }
+
+        public static void Check<O>(bool ok, string message)
+        {
+            if (!ok)
+            {
+                throw (E)Activator.CreateInstance(typeof(E), message);
+            }
+        }
+
+        public static void Check(bool ok, object obj)
+        {
+            if (!ok)
+            {
+                throw (E)Activator.CreateInstance(typeof(E), obj);
+            }
+        }
+
+        public static void Check<O>(bool ok)
+        {
+            if (!ok)
+            {
+                throw (E)Activator.CreateInstance(typeof(E), typeof(O));
+            }
+        }
+
+        public static void Check(bool[] conditions)
+        {
+            foreach (bool ok in conditions)
+            {
+                if (!ok)
+                {
+                    var nullParameters = typeof(E).GetConstructors().Single().GetParameters().Select(p => (object)null).ToArray();
+
+                    throw (E)Activator.CreateInstance(typeof(E), nullParameters);
+                }
+            }
+        }
+
+        public static void Check(bool[] conditions, Exception exception)
+        {
+            foreach (bool ok in conditions)
+            {
+                if (!ok)
+                {
+                    throw exception;
+                }
+            }
+        }
+
+        public static void Check(bool[] conditions, string message)
+        {
+            foreach (bool ok in conditions)
+            {
+                if (!ok)
+                {
+                    throw (E)Activator.CreateInstance(typeof(E), message);
+                }
+            }
+        }
+
+        public static void Check<O>(bool[] conditions)
+        {
+            foreach (bool ok in conditions)
+            {
+                if (!ok)
+                {
+                    throw (E)Activator.CreateInstance(typeof(E), typeof(O));
+                }
+            }
+        }
+    }
+}
