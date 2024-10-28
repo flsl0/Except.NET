@@ -663,6 +663,26 @@ namespace System.Excepts
     }
 }
 
+namespace System.Excepts
+{
+    public static partial class Except
+    {
+        public static List<Exception> CatchAll<T>(this List<Exception> result, Action<T> function)
+        {
+            if (!ThreadIdToExceptions.ContainsKey(ThreadId))
+            {
+                return result;
+            }
+
+            var ex = ThreadIdToExceptions[ThreadId];
+
+            function((T)Activator.CreateInstance(typeof(T), ex));
+
+            return result;
+        }
+    }
+}
+
 // Generated
 namespace System.Excepts
 {
