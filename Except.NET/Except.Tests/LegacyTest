@@ -1,0 +1,324 @@
+using Xunit;
+using System.Linq;
+using System.Excepts;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace System.Excepts.Tests;
+
+public class TestApiUseCase
+{
+    // public TestApiUseCase() => Api = new();
+    private Api _Api;
+
+    private Api Api
+    {
+        get
+        {
+            if (_Api == null)
+            {
+                _Api = new();
+            }
+
+            return _Api;
+        }
+    }
+
+    [Fact]
+    public void TestApiDivide()
+    {
+        double result = Api.Divide(10, 2);
+
+        Assert.True(result == 5, "10/2 should be 5");
+
+        result = Api.Divide(10, 0);
+
+        Assert.True(result == double.PositiveInfinity, "10/0 should be PositiveInfinity (as per the function spec)");
+    }
+
+    [Fact]
+    public void TestApiGetVersion()
+    {
+        string version = Api.GetVersion();
+
+        Assert.True(version is string, $"GetVersion should always return a string even if it throws (as per the function spec)");
+    }
+
+    [Fact]
+    public void TestApiGetLabels()
+    {
+        List<string> results = Api.GetLabelsByIds(new[] {1, 2, 3, 4, 5 });
+
+        Assert.True(results is not null, "GetLabels should return a non null list (as per the function spec)");
+    }
+
+    [Fact]
+    public void TestCatchThrow()
+    {
+        Assert.Throws<LabelNotFound>(() => Api.GetLabelById(3));
+
+        Assert.Throws<DefaultLabelNotFound>(() => Api.GetLabelById(0));
+    }
+
+    [Fact]
+    public void TestPassExceptionAsArgsForObj()
+    {
+        var api = (Api) Api.CreateApi().Check<ApiNotNull>(api => api != null);
+
+        Assert.True(api != null, "The api object shouldn't be null");
+    }
+
+    [Fact]
+    public void TestCheckException()
+    {
+        var api = (Api) Api.CreateApi().Check<NotNull>();
+
+        Assert.True(api != null, "The api object shouldn't be null");
+    }
+
+    [Fact]
+    public void TestCheckExceptionThrows()
+    {
+        object nullObj = null;
+
+        Assert.Throws<NotNull>(() => nullObj.Check<NotNull>());
+    }
+
+    [Fact]
+    public void TestVoidFunction()
+    {
+        Except.Do(Api.Execute).Check(Api.IsExecuted);
+
+        Assert.True(Api.IsExecuted, "`Do` should just execute a function so it can be chained");
+    }
+
+    [Fact]
+    public void TestVoidFunctionWithTry()
+    {
+        Except.Try(Api.Execute).Check(Api.IsExecuted);
+
+        Assert.True(Api.IsExecuted, "`Try` should just execute a function in a try-catch context so it can be chained");
+    }
+
+    [Fact]
+    public void TestVoidFunctionWithTryCatch()
+    {
+        Except.Try(Api.Execute).Catch(Console.WriteLine);
+
+        Assert.True(Api.IsExecuted, "`Catch` should resolve to the correct catch function");
+    }
+
+    [Fact]
+    public void TestCatchWithObject()
+    {
+        var api = (Api) Except.Try(() => throw new Exception())
+            .Catch<Exception>(new Api())
+            .Catch<ArgumentNullException>(null);
+
+        Assert.True(api != null);
+    }
+}
+
+public class TestExceptTry
+{
+    [Fact]
+    public void TestCorrectDivide()
+    {
+        double result = Except.Try(() => Lib.Divide(10, 2));
+
+        Assert.True(result == 5, "10/2 should be 5 without handling any exceptions");
+
+        double result2 = Except.Try(() => Lib.Divide(10, 2)).Catch(Console.WriteLine);
+
+        Assert.True(result2 == 5, "10/2 should be 5");
+    }
+
+    [Fact]
+    public void TestIncorrectDivide()
+    {
+        double result = Except.Try(() => Lib.Divide(10, 0));
+
+        Assert.True(result == default(double), "10/0 should be default(double) without handling any exceptions");
+
+        double result2 = Except.Try(() => Lib.Divide(10, 0)).Catch(_ => double.PositiveInfinity);
+
+        Assert.True(result2 == double.PositiveInfinity, "10/0 could be Infinity");
+    }
+
+    [Fact]
+    public void TestMultiCatch()
+    {
+        string version = Except.Try(Lib.GetVersion)
+            .Catch((NotImplementedException ex) => "1.0.0")
+            .Catch((Exception ex) => "0.0.0");
+
+        Assert.True(version == "1.0.0", "Only the correct exception should be handled in a multiple catch");
+    }
+
+    [Fact]
+    public void TestMultiCatchWithSwitch()
+    {
+        string version = Except.Try(Lib.GetVersion).Catch(ex => { switch (ex)
+        {
+            case NotImplementedException n: return "1.0.0";
+            case Exception e: return "1.0.0";
+            default: return "0.0.0";
+        }});
+
+        Assert.True(version == "1.0.0", $"Getting a NotImplementedException should return 1.0.0");
+    }
+
+    [Fact]
+    public void TestMultiCatchWithGenerics()
+    {
+        string version = Except.Try(Lib.GetVersion)
+            .Catch<NotImplementedException>(_ => "1.0.0")
+            .Catch<Exception>(_ => "0.0.0");
+
+        Assert.True(version == "1.0.0", $"Getting a NotImplementedException should return 1.0.0");
+    }
+
+    [Fact]
+    public void TestCatchWithNoLambda()
+    {
+        string version = Except.Try(Lib.GetVersion)
+            .Catch<NotImplementedException>("1.0.0")
+            .Catch<Exception>("0.0.0");
+
+        Assert.True(version == "1.0.0", $"Getting a NotImplementedException should return 1.0.0");
+    }
+
+    [Fact]
+    public void TestTryExceptionWithThreads()
+    {
+        string result = "";
+
+        string result2 = "";
+
+        Parallel.Invoke(
+            () => Except.Try(Lib.GetVersion).Catch(ex => result = ex.Message),
+            () => Except.Try(Lib.GetVersion2).Catch(ex => result2 = ex.Message)
+        );
+
+        Assert.True(result != result2, "Trying should be thread safe and handle different exceptions");
+    }
+
+    [Fact]
+    public void TestDefaultCatch()
+    {
+        string version = Except.Try(Lib.GetVersion)
+            .Catch((Exception ex) => "0.0.0")
+            .Catch((NotImplementedException ex) => "1.0.0");
+
+        Assert.True(version == "0.0.0", "The exception type should be the default catch (meaning all other catch will be ignored after)");
+    }
+
+    [Fact]
+    public void TestCatchHandleCorrectException()
+    {
+        string version = Except.Try(Lib.GetVersion)
+            .Catch<ArgumentNullException>("0.0.0")
+            .Catch<NotImplementedException>("1.0.0")
+            .Catch<Exception>("0.0.0");
+
+        Assert.True(version == "1.0.0", $"Getting a NotImplementedException should return 1.0.0");
+    }
+}
+
+public class TestExceptCheck
+{
+    [Fact]
+    public void TestCheckThrows()
+    {
+        Assert.Throws<Exception>(() => Except.Check(false));
+    }
+}
+
+public class TestExceptForEach
+{
+    [Fact]
+    public void TestForEachCatchAll()
+    {
+        List<Exception> exceptions = new();
+
+        Except.ForEach(new[] { 1, 2, 3 }, _ => throw new Exception()).CatchAll(exceptions.AddRange);
+
+        Assert.True(exceptions.Count > 0, "The list of exceptions shouldn't be empty after catching them all");
+    }
+
+    [Fact]
+    public void TestForEachGet()
+    {
+        List<Exception> exceptions = new();
+
+        List<string> result = Except.ForEach(new[] { "1", "2", "3", "4" }, Lib.GetLabel).CatchAll(exceptions.AddRange);
+
+        Assert.True(result.Count > 0, "The list of result shouldn't be empty after getting them all");
+
+        Assert.True(exceptions.Count > 0, "The list of exceptions shouldn't be empty after catching them all");
+    }
+
+    [Fact]
+    public void TestForEachGetById()
+    {
+        List<Exception> exceptions = new();
+
+        List<string> result = Except.ForEach(new[] { 1, 2, 3, 4 }, Lib.GetLabelById).CatchAll(exceptions.AddRange);
+
+        Assert.True(result.Count > 0, "The list of result shouldn't be empty after getting them all");
+
+        Assert.True(exceptions.Count > 0, "The list of exceptions shouldn't be empty after catching them all");
+    }
+
+    [Fact]
+    public void TestForEachTryWithLinq()
+    {
+        List<Exception> exceptions = new();
+
+        List<int> arr = [1, 2, 3, 4, 5, 6];
+
+        arr.Where(i => i % 2 == 0).ForEachTry(_ => throw new Exception()).CatchAll(exceptions.AddRange);
+
+        Assert.True(exceptions.Count > 0, "The list of exceptions shouldn't be empty after catching them all");
+    }
+}
+
+public class TestCheck
+{
+    [Fact]
+    public void TestCorrectCheck()
+    {
+        double result = Lib.Divide(10, 2)
+            .Check(res => res == 5)
+            .Do(res => res * 2)
+            .Check(res => res == 10);
+
+        Assert.True(result == 10, "10/2 should be equal to 5 times 2 should be equal to 10");
+    }
+
+    [Fact]
+    public void TestPassExceptionAsArgs()
+    {
+        double result = Lib.Divide(10, 2)
+            .Check<ResultNotCorrect>(res => res == 5)
+            .Check(res => res > 0);
+
+        Assert.True(result == 5, "10/2 should be equal to 5");
+    }
+
+    [Fact]
+    public void TestIncorrectCheck()
+    {
+        Assert.Throws<Exception>(() => Lib.Divide(10, 2).Check(res => res == 0));
+    }
+
+    [Fact]
+    public void TestMultipleCheckForObject()
+    {
+        var api = (Api) Api.CreateApi()
+            .Check<ApiNotNull>(api => api != null)
+            .Check(true);
+
+        Assert.True(api != null, "The api object shouldn't be null");
+    }
+}
