@@ -13,7 +13,7 @@
             return true;
         }
 
-        public static Exception? Try(Action function)
+        public static Exception Try(Action function)
         {
             try
             {

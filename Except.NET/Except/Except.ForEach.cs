@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace System.Excepts
 {
     public partial class Except
@@ -37,9 +39,9 @@ namespace System.Excepts
 
         public static List<TSource> ForEach<TArg, TSource>(IEnumerable<TArg> list, Func<TArg, TSource> function)
         {
-            List<TSource> results = new();
+            List<TSource> results = new List<TSource>();
 
-            List<Exception> exceptions = new();
+            List<Exception> exceptions = new List<Exception>();
 
             foreach (TArg obj in list)
             {
@@ -101,7 +103,7 @@ namespace System.Excepts
 
         public static List<TSource> ForEachTry<TSource>(this List<TSource> list, Func<TSource, TSource> function)
         {
-            List<TSource> newList = new();
+            List<TSource> newList = new List<TSource>();
 
             List<Exception> exceptions = new List<Exception>();
 

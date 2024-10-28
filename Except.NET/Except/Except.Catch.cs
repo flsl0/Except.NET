@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace System.Excepts
 {
     public static partial class Except
@@ -666,7 +668,7 @@ namespace System.Excepts
 {
     public static partial class Except
     {
-        public static List<int> CatchAll<T>(this List<int> result, Action<AggregateException> function) where T : AggregateException
+        public static List<int> CatchAll<T>(this List<int> result, Action<T> function)
         {
             if (!ThreadIdToExceptions.ContainsKey(ThreadId))
             {
@@ -675,19 +677,19 @@ namespace System.Excepts
 
             var ex = ThreadIdToExceptions[ThreadId];
 
-            function(new AggregateException(ex));
+            function((T)Activator.CreateInstance(typeof(T), ex));
 
             return result;
         }
-     }
- }
+    }
+}
 
 // Generated
 namespace System.Excepts
 {
     public static partial class Except
     {
-        public static List<long> CatchAll<T>(this List<long> result, Action<AggregateException> function) where T : AggregateException
+        public static List<long> CatchAll<T>(this List<long> result, Action<T> function)
         {
             if (!ThreadIdToExceptions.ContainsKey(ThreadId))
             {
@@ -696,19 +698,19 @@ namespace System.Excepts
 
             var ex = ThreadIdToExceptions[ThreadId];
 
-            function(new AggregateException(ex));
+            function((T)Activator.CreateInstance(typeof(T), ex));
 
             return result;
         }
-     }
- }
+    }
+}
 
 // Generated
 namespace System.Excepts
 {
     public static partial class Except
     {
-        public static List<float> CatchAll<T>(this List<float> result, Action<AggregateException> function) where T : AggregateException
+        public static List<float> CatchAll<T>(this List<float> result, Action<T> function)
         {
             if (!ThreadIdToExceptions.ContainsKey(ThreadId))
             {
@@ -717,19 +719,19 @@ namespace System.Excepts
 
             var ex = ThreadIdToExceptions[ThreadId];
 
-            function(new AggregateException(ex));
+            function((T)Activator.CreateInstance(typeof(T), ex));
 
             return result;
         }
-     }
- }
+    }
+}
 
 // Generated
 namespace System.Excepts
 {
     public static partial class Except
     {
-        public static List<double> CatchAll<T>(this List<double> result, Action<AggregateException> function) where T : AggregateException
+        public static List<double> CatchAll<T>(this List<double> result, Action<T> function)
         {
             if (!ThreadIdToExceptions.ContainsKey(ThreadId))
             {
@@ -738,19 +740,19 @@ namespace System.Excepts
 
             var ex = ThreadIdToExceptions[ThreadId];
 
-            function(new AggregateException(ex));
+            function((T)Activator.CreateInstance(typeof(T), ex));
 
             return result;
         }
-     }
- }
+    }
+}
 
 // Generated
 namespace System.Excepts
 {
     public static partial class Except
     {
-        public static List<bool> CatchAll<T>(this List<bool> result, Action<AggregateException> function) where T : AggregateException
+        public static List<bool> CatchAll<T>(this List<bool> result, Action<T> function)
         {
             if (!ThreadIdToExceptions.ContainsKey(ThreadId))
             {
@@ -759,19 +761,19 @@ namespace System.Excepts
 
             var ex = ThreadIdToExceptions[ThreadId];
 
-            function(new AggregateException(ex));
+            function((T)Activator.CreateInstance(typeof(T), ex));
 
             return result;
         }
-     }
- }
+    }
+}
 
 // Generated
 namespace System.Excepts
 {
     public static partial class Except
     {
-        public static List<char> CatchAll<T>(this List<char> result, Action<AggregateException> function) where T : AggregateException
+        public static List<char> CatchAll<T>(this List<char> result, Action<T> function)
         {
             if (!ThreadIdToExceptions.ContainsKey(ThreadId))
             {
@@ -780,19 +782,19 @@ namespace System.Excepts
 
             var ex = ThreadIdToExceptions[ThreadId];
 
-            function(new AggregateException(ex));
+            function((T)Activator.CreateInstance(typeof(T), ex));
 
             return result;
         }
-     }
- }
+    }
+}
 
 // Generated
 namespace System.Excepts
 {
     public static partial class Except
     {
-        public static List<string> CatchAll<T>(this List<string> result, Action<AggregateException> function) where T : AggregateException
+        public static List<string> CatchAll<T>(this List<string> result, Action<T> function)
         {
             if (!ThreadIdToExceptions.ContainsKey(ThreadId))
             {
@@ -801,19 +803,19 @@ namespace System.Excepts
 
             var ex = ThreadIdToExceptions[ThreadId];
 
-            function(new AggregateException(ex));
+            function((T)Activator.CreateInstance(typeof(T), ex));
 
             return result;
         }
-     }
- }
+    }
+}
 
 // Generated
 namespace System.Excepts
 {
     public static partial class Except
     {
-        public static List<object> CatchAll<T>(this List<object> result, Action<AggregateException> function) where T : AggregateException
+        public static List<object> CatchAll<T>(this List<object> result, Action<T> function)
         {
             if (!ThreadIdToExceptions.ContainsKey(ThreadId))
             {
@@ -822,9 +824,9 @@ namespace System.Excepts
 
             var ex = ThreadIdToExceptions[ThreadId];
 
-            function(new AggregateException(ex));
+            function((T)Activator.CreateInstance(typeof(T), ex));
 
             return result;
         }
-     }
- }
+    }
+}
