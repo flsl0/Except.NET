@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace System.Excepts
 {
     public static partial class Except
