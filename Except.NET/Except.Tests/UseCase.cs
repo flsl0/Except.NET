@@ -61,20 +61,16 @@ public class Api
 
     private void HandleExceptions(List<Exception> list) => Console.WriteLine(list);
 
-    public double Divide(double dividend, double divisor) => Except
-        .Try(() => Lib.Divide(dividend, divisor))
+    public double Divide(double dividend, double divisor) => Except.Try(() => Lib.Divide(dividend, divisor))
         .Catch<DivisorCantBeZero>(double.PositiveInfinity);
 
-    public string GetVersion() => Except
-        .Try(Lib.GetVersion)
+    public string GetVersion() => Except.Try(Lib.GetVersion)
         .Catch(_ => "0.0.0-Dev");
 
-    public List<string> GetLabelsByIds(int[] arr) => Except
-        .ForEach(arr, Lib.GetLabelById)
+    public List<string> GetLabelsByIds(int[] arr) => Except.ForEach(arr, Lib.GetLabelById)
         .CatchAll(HandleExceptions);
 
-    public string GetLabelById(int labelId) => Except
-        .Try(() => Lib.GetLabelById(labelId))
+    public string GetLabelById(int labelId) => Except.Try(() => Lib.GetLabelById(labelId))
         .Catch<LabelNotFound>(Except.Throw)
         .Catch<DefaultLabelNotFound>(Except.Throw);
 
