@@ -49,6 +49,10 @@ public class TestApi
         .Check(Api.IsExecuted, "`Do` should just execute a function so it can be chained");
 
     [Fact]
+    public void TestVoidFunctionWithRun() => Except.Run(Api.Execute)
+        .Check(Api.IsExecuted, "`Run` should just execute a function so it can be chained");
+
+    [Fact]
     public void TestVoidFunctionWithTry() => Except.Try(Api.Execute)
         .Check(Api.IsExecuted, "`Try` should just execute a function in a try-catch context so it can be chained");
 
