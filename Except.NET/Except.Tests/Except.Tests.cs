@@ -138,6 +138,20 @@ public class TestTry
         .Catch<NotImplementedException>("1.0.0")
         .Catch<Exception>("0.0.0")
         .Check(v => v == "1.0.0", $"Getting a NotImplementedException should return 1.0.0");
+
+    [Fact]
+    public void TestNestedTry() => Except.Try(() => Except.Try(() => throw new Exception()))
+        .Catch(Except.Throw)
+        .Check(true, "Catch should only handle exception at its stack level");
+
+    [Fact]
+    public void TestNestedTryWithThrow() => Assert.Throws<ArgumentNullException>(() => Except.Try(() => 
+        {
+            Except.Try(() => throw new Exception());
+
+            throw new ArgumentNullException();
+        }).Catch(Except.Throw)
+    );
 }
 
 public class TestForEach

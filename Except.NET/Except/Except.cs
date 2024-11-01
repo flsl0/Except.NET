@@ -1,11 +1,14 @@
 using System.Threading;
+using System.Diagnostics;
 using System.Collections.Generic;
 
 namespace System.Excepts
 {
     public partial class Except
     {
-        private static int ThreadId => Thread.CurrentThread.ManagedThreadId;
+        private static int FrameCount => new StackTrace(true).FrameCount;
+
+        private static int ThreadId => Thread.CurrentThread.ManagedThreadId + FrameCount;
 
         private static Dictionary<int, Exception> ThreadIdToException = new Dictionary<int, Exception>();
 

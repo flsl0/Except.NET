@@ -93,6 +93,7 @@ namespace System.Excepts
             return default(TSource);
         }
 
+#if NET8_0
         public static List<TSource> CatchAll<TSource>(this List<TSource> list, Action<List<Exception>> function)
         {
             if (!ThreadIdToExceptions.ContainsKey(ThreadId))
@@ -104,6 +105,7 @@ namespace System.Excepts
 
             return list;
         }
+#endif
 
         public static IEnumerable<TSource> CatchAll<TSource>(this IEnumerable<TSource> list, Action<List<Exception>> function)
         {
