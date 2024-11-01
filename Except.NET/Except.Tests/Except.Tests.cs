@@ -154,8 +154,26 @@ public class TestTry
             Except.Try(() => throw new Exception());
 
             throw new ArgumentNullException();
-        }).Catch(Except.Throw)
-    );
+        })
+        .Catch(Except.Throw));
+
+    [Fact]
+    public void TestExplicitIgnoreException() => Except.Try(() =>
+        {
+            Except.Try(() => throw new Exception()).Catch();
+
+            Except.Try(() => throw new ArgumentNullException())
+                .Catch(e => Except.Check(e is ArgumentNullException));
+        });
+
+    [Fact]
+    public void TestNoExplicitIgnoreException() => Except.Try(() =>
+        {
+            Except.Try(() => throw new Exception());
+
+            Except.Try(() => 1 + 1)
+                .Catch(e => Except.Check(e is Exception)); // This is a current limitation
+        });
 }
 
 public class TestForEach

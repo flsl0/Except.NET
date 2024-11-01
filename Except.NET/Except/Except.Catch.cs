@@ -65,6 +65,13 @@ namespace System.Excepts
             return res;
         } 
 
+        public static TSource Catch<TSource>(this TSource result)
+        {
+            ThreadIdToException.Remove(ThreadId);
+
+            return result;
+        }
+
         public static TSource Catch<TSource>(this TSource result, Func<Exception, TSource> function)
         {
             if (!ThreadIdToException.ContainsKey(ThreadId))
