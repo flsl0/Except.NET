@@ -2,6 +2,17 @@
 {
     public partial class Except
     {
+        public static TSource Run<TSource>(this bool ok, Func<TSource> function) => function();
+
+        public static TSource Run<TSource>(this TSource result, Func<TSource, TSource> function) => function(result);
+
+        public static bool Run(Action function)
+        {
+            function();
+
+            return true;
+        }
+
         public static TSource Do<TSource>(this bool ok, Func<TSource> function) => function();
 
         public static TSource Do<TSource>(this TSource result, Func<TSource, TSource> function) => function(result);
