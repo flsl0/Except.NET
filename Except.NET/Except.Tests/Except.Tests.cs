@@ -156,6 +156,14 @@ public class TestTry
 
 public class TestForEach
 {
+    private List<int> GetListInt(List<int> list) => list;
+
+    private List<int> GetList() => Except.ForEach(new List<int> { 1, 2, 3, 4 }, i => GetListInt(i));
+
+    [Fact]
+    public void TestForEachRange() => GetList()
+        .Check(list => list.Count == 16, "ForEach should handle range and concat list");
+
     private List<Exception> Exceptions = new();
 
     [Fact]
