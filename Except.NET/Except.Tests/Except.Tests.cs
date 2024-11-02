@@ -173,7 +173,8 @@ public class TestTry
 
             Except.Try(() => 1 + 1)
                 .Catch(_ => Except.Check(false)); // This function is not executed
-        });
+        })
+        .Catch(Except.Throw);
 }
 
 public class TestForEach
