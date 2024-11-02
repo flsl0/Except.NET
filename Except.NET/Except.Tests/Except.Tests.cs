@@ -172,7 +172,7 @@ public class TestTry
             Except.Try(() => throw new Exception());
 
             Except.Try(() => 1 + 1)
-                .Catch(e => Except.Check(e is Exception)); // This is a current limitation
+                .Catch(_ => Except.Check(false)); // This function is not executed
         });
 }
 

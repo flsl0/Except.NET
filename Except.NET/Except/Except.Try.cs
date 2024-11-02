@@ -26,6 +26,11 @@
 
         public static Exception Try(Action function)
         {
+            if (ThreadIdToException.ContainsKey(ThreadId))
+            {
+                ThreadIdToException.Remove(ThreadId);
+            }
+
             try
             {
                 function();
@@ -49,6 +54,11 @@
 
         public static TSource Try<TSource>(Func<TSource> function)
         {
+            if (ThreadIdToException.ContainsKey(ThreadId))
+            {
+                ThreadIdToException.Remove(ThreadId);
+            }
+
             try
             {
                 return function();
