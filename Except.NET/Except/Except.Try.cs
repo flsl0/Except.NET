@@ -37,14 +37,7 @@
             }
             catch (Exception ex)
             {
-                try
-                {
-                    ThreadIdToException.Add(ThreadId, ex);
-                }
-                catch
-                {
-                    ThreadIdToException[ThreadId] = ex;
-                }
+                ThreadIdToException.Add(ThreadId, ex);
 
                 return ex;
             }
@@ -65,14 +58,7 @@
             }
             catch (Exception ex)
             {
-                try
-                {
-                    ThreadIdToException.Add(ThreadId, ex);
-                }
-                catch
-                {
-                    ThreadIdToException[ThreadId] = ex;
-                }
+                ThreadIdToException.Add(ThreadId, ex);
 
                 return default(TSource);
             }
