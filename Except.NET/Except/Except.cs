@@ -30,7 +30,7 @@ namespace System.Excepts
 
         public override bool Test() => ToTest != null;
 
-        public string Message = "The object is null";
+        public new string Message = "The object is null";
     }
 
     public class StrictlyPositive : CheckException
@@ -39,6 +39,24 @@ namespace System.Excepts
 
         public override bool Test() => ToTest > 0;
 
-        public string Message = "The value is not strictly positive";
+        public new string Message = "The value is not strictly positive";
+    }
+
+    public class NotBlank : CheckException
+    {
+        public override dynamic ToTest { get; set; }
+
+        public override bool Test() => !string.IsNullOrEmpty(ToTest);
+
+        public new string Message = "The value must not be blank";
+    }
+
+    public class NotEmpty : CheckException
+    {
+        public override dynamic ToTest { get; set; }
+
+        public override bool Test() => ToTest.Count > 0;
+
+        public new string Message = "The value must have at least one author";
     }
 }

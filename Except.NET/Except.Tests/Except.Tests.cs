@@ -66,6 +66,21 @@ public class TestApi
         .Catch<Exception>(new Api())
         .Catch<ArgumentNullException>(null)
         .Check(api => api != null, "Catch can also return a single object without using a lambda");
+
+    [Fact]
+    public void TestCreateBook() => new Book("Title", 0, new List<string> { "Author" }).Check<NotNull>();
+
+    [Fact]
+    public void TestBookNoTitle() => Assert.Throws<NotNull>(() => new Book(null, 0, new List<string> { "Author" }));
+
+    [Fact]
+    public void TestBookBlankTitle() => Assert.Throws<NotBlank>(() => new Book("", 0, new List<string> { "Author" }));
+
+    [Fact]
+    public void TestBookNoAuthors() => Assert.Throws<NotNull>(() => new Book("Title", 0, null));
+
+    [Fact]
+    public void TestBookEmptyAuthors() => Assert.Throws<NotEmpty>(() => new Book("Title", 0, new List<string>()));
 }
 
 public class TestTry

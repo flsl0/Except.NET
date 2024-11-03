@@ -83,3 +83,19 @@ public class Api
 
     public void Execute() => IsExecuted = true;
 }
+
+public record Book
+{
+    public Book(string title, int isbn, List<string> authors)
+    {
+        title.Check<NotNull>();
+
+        title.Check<NotBlank>();
+
+        isbn.Check<NotNull>();
+
+        authors.Check<NotNull>();
+
+        authors.Check<NotEmpty>();
+    }
+}
