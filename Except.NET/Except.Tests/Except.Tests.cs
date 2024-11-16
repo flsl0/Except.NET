@@ -102,6 +102,10 @@ public class TestTry
         .Catch(_ => double.PositiveInfinity)
         .Check(r => r == double.PositiveInfinity, "10/0 could be Infinity");
 
+    public void TestDivideErrorOverrideReturnWithNamedArgs() => Except.Try(() => Lib.Divide(10, 0))
+        .Catch<Exception>(@return: double.PositiveInfinity)
+        .Check(r => r == double.PositiveInfinity, "10/0 could be Infinity");
+
     [Fact]
     public void TestMultiCatch() => Except.Try(Lib.GetVersion)
         .Catch((NotImplementedException ex) => "1.0.0")

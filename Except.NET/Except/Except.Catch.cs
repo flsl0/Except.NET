@@ -4,7 +4,7 @@ namespace System.Excepts
 {
     public static partial class Except
     {
-        public static TSource Catch<TSource, TEx>(this TSource result, TSource newResult) where TEx : Exception
+        public static TSource Catch<TSource, TEx>(this TSource result, TSource @return) where TEx : Exception
         {
             if (!ThreadIdToException.ContainsKey(ThreadId))
             {
@@ -20,7 +20,7 @@ namespace System.Excepts
 
             ThreadIdToException.Remove(ThreadId);
 
-            return newResult;
+            return @return;
         }
 
         public static TSource Catch<TSource, TEx>(this TSource result, Action<TEx> function) where TEx : Exception
@@ -175,7 +175,7 @@ namespace System.Excepts
             return default(int);
         }
 
-        public static int Catch<T>(this int result, int newResult) where T : Exception, new()
+        public static int Catch<T>(this int result, int @return) where T : Exception, new()
         {
             if (!ThreadIdToException.ContainsKey(ThreadId))
             {
@@ -191,7 +191,7 @@ namespace System.Excepts
 
             ThreadIdToException.Remove(ThreadId);
 
-            return newResult;
+            return @return;
         }
     }
 }
@@ -243,7 +243,7 @@ namespace System.Excepts
             return default(long);
         }
 
-        public static long Catch<T>(this long result, long newResult) where T : Exception, new()
+        public static long Catch<T>(this long result, long @return) where T : Exception, new()
         {
             if (!ThreadIdToException.ContainsKey(ThreadId))
             {
@@ -259,7 +259,7 @@ namespace System.Excepts
 
             ThreadIdToException.Remove(ThreadId);
 
-            return newResult;
+            return @return;
         }
     }
 }
@@ -311,7 +311,7 @@ namespace System.Excepts
             return default(float);
         }
 
-        public static float Catch<T>(this float result, float newResult) where T : Exception, new()
+        public static float Catch<T>(this float result, float @return) where T : Exception, new()
         {
             if (!ThreadIdToException.ContainsKey(ThreadId))
             {
@@ -327,7 +327,7 @@ namespace System.Excepts
 
             ThreadIdToException.Remove(ThreadId);
 
-            return newResult;
+            return @return;
         }
     }
 }
@@ -379,7 +379,7 @@ namespace System.Excepts
             return default(double);
         }
 
-        public static double Catch<T>(this double result, double newResult) where T : Exception, new()
+        public static double Catch<T>(this double result, double @return) where T : Exception, new()
         {
             if (!ThreadIdToException.ContainsKey(ThreadId))
             {
@@ -395,7 +395,7 @@ namespace System.Excepts
 
             ThreadIdToException.Remove(ThreadId);
 
-            return newResult;
+            return @return;
         }
     }
 }
@@ -447,7 +447,7 @@ namespace System.Excepts
             return default(bool);
         }
 
-        public static bool Catch<T>(this bool result, bool newResult) where T : Exception, new()
+        public static bool Catch<T>(this bool result, bool @return) where T : Exception, new()
         {
             if (!ThreadIdToException.ContainsKey(ThreadId))
             {
@@ -463,7 +463,7 @@ namespace System.Excepts
 
             ThreadIdToException.Remove(ThreadId);
 
-            return newResult;
+            return @return;
         }
     }
 }
@@ -515,7 +515,7 @@ namespace System.Excepts
             return default(char);
         }
 
-        public static char Catch<T>(this char result, char newResult) where T : Exception, new()
+        public static char Catch<T>(this char result, char @return) where T : Exception, new()
         {
             if (!ThreadIdToException.ContainsKey(ThreadId))
             {
@@ -531,7 +531,7 @@ namespace System.Excepts
 
             ThreadIdToException.Remove(ThreadId);
 
-            return newResult;
+            return @return;
         }
     }
 }
@@ -583,7 +583,7 @@ namespace System.Excepts
             return default(string);
         }
 
-        public static string Catch<T>(this string result, string newResult) where T : Exception, new()
+        public static string Catch<T>(this string result, string @return) where T : Exception, new()
         {
             if (!ThreadIdToException.ContainsKey(ThreadId))
             {
@@ -599,7 +599,7 @@ namespace System.Excepts
 
             ThreadIdToException.Remove(ThreadId);
 
-            return newResult;
+            return @return;
         }
     }
 }
@@ -651,7 +651,7 @@ namespace System.Excepts
             return default(object);
         }
 
-        public static object Catch<T>(this object result, object newResult) where T : Exception, new()
+        public static object Catch<T>(this object result, object @return) where T : Exception, new()
         {
             if (!ThreadIdToException.ContainsKey(ThreadId))
             {
@@ -667,7 +667,7 @@ namespace System.Excepts
 
             ThreadIdToException.Remove(ThreadId);
 
-            return newResult;
+            return @return;
         }
     }
 }
