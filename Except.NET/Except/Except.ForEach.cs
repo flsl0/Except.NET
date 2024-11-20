@@ -6,6 +6,11 @@ namespace System.Excepts
     {
         public static List<Exception> ForEach<TSource>(IEnumerable<TSource> list, Action<TSource> function)
         {
+            if (ThreadIdToExceptions.ContainsKey(ThreadId))
+            {
+                ThreadIdToExceptions.Remove(ThreadId);
+            }
+
             List<Exception> exceptions = new List<Exception>();
 
             foreach (TSource obj in list)
@@ -39,6 +44,11 @@ namespace System.Excepts
 
         public static TSource ForEach<TSource>(TSource list, Func<TSource, TSource> function) where TSource : List<int>, new()
         {
+            if (ThreadIdToExceptions.ContainsKey(ThreadId))
+            {
+                ThreadIdToExceptions.Remove(ThreadId);
+            }
+
             TSource results = new TSource();
 
             List<Exception> exceptions = new List<Exception>();
@@ -72,6 +82,11 @@ namespace System.Excepts
 
         public static List<TSource> ForEach<TArg, TSource>(IEnumerable<TArg> list, Func<TArg, TSource> function)
         {
+            if (ThreadIdToExceptions.ContainsKey(ThreadId))
+            {
+                ThreadIdToExceptions.Remove(ThreadId);
+            }
+
             List<TSource> results = new List<TSource>();
 
             List<Exception> exceptions = new List<Exception>();
@@ -105,6 +120,11 @@ namespace System.Excepts
 
         public static List<TSource> ForEach<TArg, TSource>(IEnumerable<TArg> list, Func<TArg, List<TSource>> function)
         {
+            if (ThreadIdToExceptions.ContainsKey(ThreadId))
+            {
+                ThreadIdToExceptions.Remove(ThreadId);
+            }
+
             List<TSource> results = new List<TSource>();
 
             List<Exception> exceptions = new List<Exception>();
@@ -138,6 +158,11 @@ namespace System.Excepts
 
         public static IEnumerable<TSource> ForEachTry<TSource>(this IEnumerable<TSource> list, Action<TSource> function)
         {
+            if (ThreadIdToExceptions.ContainsKey(ThreadId))
+            {
+                ThreadIdToExceptions.Remove(ThreadId);
+            }
+
             List<Exception> exceptions = new List<Exception>();
 
             foreach (TSource obj in list)
@@ -169,6 +194,11 @@ namespace System.Excepts
 
         public static List<TSource> ForEachTry<TSource>(this List<TSource> list, Func<TSource, TSource> function)
         {
+            if (ThreadIdToExceptions.ContainsKey(ThreadId))
+            {
+                ThreadIdToExceptions.Remove(ThreadId);
+            }
+
             List<TSource> newList = new List<TSource>();
 
             List<Exception> exceptions = new List<Exception>();
