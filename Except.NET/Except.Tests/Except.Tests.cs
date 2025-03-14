@@ -1,3 +1,5 @@
+using static System.Excepts.Except;
+
 namespace System.Excepts.Tests;
 
 public class TestApi
@@ -45,24 +47,24 @@ public class TestApi
     public void TestCustomProvidedCheckExceptionThrows() => Assert.Throws<StrictlyPositive>(() => (0).Check<StrictlyPositive>());
 
     [Fact]
-    public void TestVoidFunctionWithDo() => Except.Do(Api.Execute)
+    public void TestVoidFunctionWithDo() => Do(Api.Execute)
         .Check(Api.IsExecuted, "`Do` should just execute a function so it can be chained");
 
     [Fact]
-    public void TestVoidFunctionWithRun() => Except.Run(Api.Execute)
+    public void TestVoidFunctionWithRun() => Run(Api.Execute)
         .Check(Api.IsExecuted, "`Run` should just execute a function so it can be chained");
 
     [Fact]
-    public void TestVoidFunctionWithTry() => Except.Try(Api.Execute)
+    public void TestVoidFunctionWithTry() => Try(Api.Execute)
         .Check(Api.IsExecuted, "`Try` should just execute a function in a try-catch context so it can be chained");
 
     [Fact]
-    public void TestVoidFunctionWithTryCatch() => Except.Try(Api.Execute)
+    public void TestVoidFunctionWithTryCatch() => Try(Api.Execute)
         .Catch(Console.WriteLine)
         .Check(Api.IsExecuted, "`Catch` should resolve to the correct catch function");
 
     [Fact]
-    public void TestCatchAndReturnSingleObject() => Except.Try(() => throw new Exception())
+    public void TestCatchAndReturnSingleObject() => Try(() => throw new Exception())
         .Catch<Exception>(new Api())
         .Catch<ArgumentNullException>(null)
         .Check(api => api != null, "Catch can also return a single object without using a lambda");
@@ -86,34 +88,34 @@ public class TestApi
 public class TestTry
 {
     [Fact]
-    public void TestTryDivide() => Except.Try(() => Lib.Divide(10, 2))
+    public void TestTryDivide() => Try(() => Lib.Divide(10, 2))
         .Check(r => r == 5, "10/2 should be 5 without handling any exceptions");
 
     [Fact]
-    public void TestTryCatchDivide() => Except.Try(() => Lib.Divide(10, 2))
+    public void TestTryCatchDivide() => Try(() => Lib.Divide(10, 2))
         .Catch(Console.WriteLine)
         .Check(r => r == 5, "10/2 should be 5");
 
     [Fact]
-    public void TestDivideErrorReturnDefault() => Except.Try(() => Lib.Divide(10, 0))
+    public void TestDivideErrorReturnDefault() => Try(() => Lib.Divide(10, 0))
         .Check(r => r == default(double), "10/0 should be default(double) without throwing any exceptions");
 
-    public void TestDivideErrorOverrideReturn() => Except.Try(() => Lib.Divide(10, 0))
+    public void TestDivideErrorOverrideReturn() => Try(() => Lib.Divide(10, 0))
         .Catch(_ => double.PositiveInfinity)
         .Check(r => r == double.PositiveInfinity, "10/0 could be Infinity");
 
-    public void TestDivideErrorOverrideReturnWithNamedArgs() => Except.Try(() => Lib.Divide(10, 0))
+    public void TestDivideErrorOverrideReturnWithNamedArgs() => Try(() => Lib.Divide(10, 0))
         .Catch<Exception>(@return: double.PositiveInfinity)
         .Check(r => r == double.PositiveInfinity, "10/0 could be Infinity");
 
     [Fact]
-    public void TestMultiCatch() => Except.Try(Lib.GetVersion)
+    public void TestMultiCatch() => Try(Lib.GetVersion)
         .Catch((NotImplementedException ex) => "1.0.0")
         .Catch((Exception ex) => "0.0.0")
         .Check(v => v == "1.0.0", "Only the correct exception should be handled in a multiple catch");
 
     [Fact]
-    public void TestMultiCatchWithSwitch() => Except.Try(Lib.GetVersion)
+    public void TestMultiCatchWithSwitch() => Try(Lib.GetVersion)
         .Catch(ex => { switch (ex)
         {
             case NotImplementedException n: return "1.0.0";
@@ -123,13 +125,13 @@ public class TestTry
         .Check(v => v == "1.0.0", "Getting a NotImplementedException should return 1.0.0");
 
     [Fact]
-    public void TestMultiCatchWithGenerics() => Except.Try(Lib.GetVersion)
+    public void TestMultiCatchWithGenerics() => Try(Lib.GetVersion)
         .Catch<NotImplementedException>(_ => "1.0.0")
         .Catch<Exception>(_ => "0.0.0")
         .Check(v => v == "1.0.0", "Getting a NotImplementedException should return 1.0.0");
 
     [Fact]
-    public void TestCatchWithNoLambda() => Except.Try(Lib.GetVersion)
+    public void TestCatchWithNoLambda() => Try(Lib.GetVersion)
         .Catch<NotImplementedException>("1.0.0")
         .Catch<Exception>("0.0.0")
         .Check(v => v == "1.0.0", "Getting a NotImplementedException should return 1.0.0");
@@ -142,65 +144,65 @@ public class TestTry
     public void TestTryExceptionWithThreads()
     {
         Parallel.Invoke(
-            () => Except.Try(Lib.GetVersion).Catch(ex => Result = ex.Message),
-            () => Except.Try(Lib.GetVersion2).Catch(ex => Result2 = ex.Message)
+            () => Try(Lib.GetVersion).Catch(ex => Result = ex.Message),
+            () => Try(Lib.GetVersion2).Catch(ex => Result2 = ex.Message)
         );
 
-        Except.Check(Result != Result2, "Trying should be thread safe and handle different exceptions");
+        Check(Result != Result2, "Trying should be thread safe and handle different exceptions");
     }
 
     [Fact]
-    public void TestDefaultCatch() => Except.Try(Lib.GetVersion)
+    public void TestDefaultCatch() => Try(Lib.GetVersion)
         .Catch((Exception ex) => "0.0.0")
         .Catch((NotImplementedException ex) => "1.0.0")
         .Check(v => v == "0.0.0", "The exception type should be the default catch (meaning all other catch will be ignored after)");
 
     [Fact]
-    public void TestCatchHandleCorrectException() => Except.Try(Lib.GetVersion)
+    public void TestCatchHandleCorrectException() => Try(Lib.GetVersion)
         .Catch<ArgumentNullException>("0.0.0")
         .Catch<NotImplementedException>("1.0.0")
         .Catch<Exception>("0.0.0")
         .Check(v => v == "1.0.0", $"Getting a NotImplementedException should return 1.0.0");
 
     [Fact]
-    public void TestNestedTry() => Except.Try(() => Except.Try(() => throw new Exception()))
-        .Catch(Except.Throw)
+    public void TestNestedTry() => Try(() => Try(() => throw new Exception()))
+        .Catch(Throw)
         .Check(true, "Catch should only handle exception at its stack level");
 
     [Fact]
-    public void TestNestedTryWithThrow() => Assert.Throws<ArgumentNullException>(() => Except.Try(() => 
+    public void TestNestedTryWithThrow() => Assert.Throws<ArgumentNullException>(() => Try(() => 
         {
-            Except.Try(() => throw new Exception());
+            Try(() => throw new Exception());
 
             throw new ArgumentNullException();
         })
-        .Catch(Except.Throw));
+        .Catch(Throw));
 
     [Fact]
-    public void TestExplicitIgnoreException() => Except.Try(() =>
+    public void TestExplicitIgnoreException() => Try(() =>
         {
-            Except.Try(() => throw new Exception()).Catch();
+            Try(() => throw new Exception()).Catch();
 
-            Except.Try(() => throw new ArgumentNullException())
-                .Catch(e => Except.Check(e is ArgumentNullException));
+            Try(() => throw new ArgumentNullException())
+                .Catch(e => Check(e is ArgumentNullException));
         });
 
     [Fact]
-    public void TestNoExplicitIgnoreException() => Except.Try(() =>
+    public void TestNoExplicitIgnoreException() => Try(() =>
         {
-            Except.Try(() => throw new Exception());
+            Try(() => throw new Exception());
 
-            Except.Try(() => 1 + 1)
-                .Catch(_ => Except.Check(false)); // This function is not executed
+            Try(() => 1 + 1)
+                .Catch(_ => Check(false)); // This function is not executed
         })
-        .Catch(Except.Throw);
+        .Catch(Throw);
 }
 
 public class TestForEach
 {
     private List<int> GetListInt(List<int> list) => list;
 
-    private List<int> GetList() => Except.ForEach(new List<int> { 1, 2, 3, 4 }, i => GetListInt(i));
+    private List<int> GetList() => ForEach(new List<int> { 1, 2, 3, 4 }, i => GetListInt(i));
 
     [Fact]
     public void TestForEachRange() => GetList()
@@ -209,18 +211,18 @@ public class TestForEach
     private List<Exception> Exceptions = new();
 
     [Fact]
-    public void TestForEachCatchAll() => Except.ForEach(new[] { 1, 2, 3 }, _ => throw new Exception())
+    public void TestForEachCatchAll() => ForEach(new[] { 1, 2, 3 }, _ => throw new Exception())
         .CatchAll(Exceptions.AddRange)
         .Check(Exceptions.GetCountAndClear() > 0, "The list of exceptions shouldn't be empty after catching them all");
 
     [Fact]
-    public void TestForEachGet() => Except.ForEach(new[] { "1", "2", "3", "4" }, Lib.GetLabel)
+    public void TestForEachGet() => ForEach(new[] { "1", "2", "3", "4" }, Lib.GetLabel)
         .CatchAll(Exceptions.AddRange)
         .Check(r => r.Count > 0, "The list of result shouldn't be empty after getting them all")
         .Check(Exceptions.GetCountAndClear() > 0, "The list of exceptions shouldn't be empty after catching them all");
 
     [Fact]
-    public void TestForEachGetById() => Except.ForEach(new[] { 1, 2, 3, 4 }, Lib.GetLabelById)
+    public void TestForEachGetById() => ForEach(new[] { 1, 2, 3, 4 }, Lib.GetLabelById)
         .CatchAll(Exceptions.AddRange)
         .Check(r => r.Count > 0, "The list of result shouldn't be empty after getting them all")
         .Check(Exceptions.GetCountAndClear() > 0, "The list of exceptions shouldn't be empty after catching them all");
@@ -267,7 +269,7 @@ public class TestCheck
     public void TestCheckError() => Assert.Throws<Exception>(() => Lib.Divide(10, 2).Check(res => res == 0));
 
     [Fact]
-    public void TestCheckThrows() => Assert.Throws<Exception>(() => Except.Check(false));
+    public void TestCheckThrows() => Assert.Throws<Exception>(() => Check(false));
 }
 
 public static class TestUtils
