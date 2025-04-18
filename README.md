@@ -4,7 +4,7 @@ Except.NET is a library that uses a fluent interface and lambda expression to im
 
 ## Usage
 You can check `Except.NET/Except.Tests/UseCase.cs` and `Except.NET/Except.Tests/Except.Tests.cs` for more example but here is quick overview :
-```
+```C#
 using static System.Excepts.Except;
 
 Dictionary<string, int> dict = new()
