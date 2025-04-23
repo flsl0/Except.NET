@@ -196,6 +196,10 @@ public class TestTry
                 .Catch(_ => Check(false)); // This function is not executed
         })
         .Catch(Throw);
+
+    [Fact]
+    public void TestNullCoercion() => (Try<double?>(() => Lib.Divide(1, 0)) ?? double.PositiveInfinity)
+        .Check(r => r == double.PositiveInfinity);
 }
 
 public class TestForEach
