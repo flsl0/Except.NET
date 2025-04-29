@@ -13,11 +13,25 @@
             return true;
         }
 
+        public static bool Run(this bool ok, Action function)
+        {
+            function();
+
+            return true;
+        }
+
         public static TSource Do<TSource>(this bool ok, Func<TSource> function) => function();
 
         public static TSource Do<TSource>(this TSource result, Func<TSource, TSource> function) => function(result);
 
         public static bool Do(Action function)
+        {
+            function();
+
+            return true;
+        }
+
+        public static bool Do(this bool ok, Action function)
         {
             function();
 

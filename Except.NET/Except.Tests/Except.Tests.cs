@@ -200,6 +200,9 @@ public class TestTry
     [Fact]
     public void TestNullCoercion() => (Try<double?>(() => Lib.Divide(1, 0)) ?? double.PositiveInfinity)
         .Check(r => r == double.PositiveInfinity);
+
+    [Fact]
+    public void TestChainRun() => Run(() => {}).Run(() => {});
 }
 
 public class TestForEach
