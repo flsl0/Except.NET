@@ -92,6 +92,10 @@ public class TestTry
         .Check(r => r == 5, "10/2 should be 5 without handling any exceptions");
 
     [Fact]
+    public void TestTryDivideWithParams() => Try<double>(Lib.Divide, 10, 2)
+        .Check(r => r == 5, "10/2 should be 5 without handling any exceptions");
+
+    [Fact]
     public void TestTryCatchDivide() => Try(() => Lib.Divide(10, 2))
         .Catch(Console.WriteLine)
         .Check(r => r == 5, "10/2 should be 5");
