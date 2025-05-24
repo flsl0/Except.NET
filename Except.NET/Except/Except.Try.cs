@@ -6,18 +6,22 @@
 
         public static TSource Run<TSource>(this TSource result, Func<TSource, TSource> function) => function(result);
 
+        public static TSource Run<TSource>(this TSource result, Func<TSource, dynamic> function) => function(result);
+
+        public static TSource Run<TSource>(this TSource result, Func<dynamic, dynamic> function) => function(result);
+
         public static bool Run(Action function)
         {
             function();
 
-            return true;
+            return default;
         }
 
         public static bool Run(this bool ok, Action function)
         {
             function();
 
-            return true;
+            return default;
         }
 
         public static T Run<T>(this T ok, Action function)
@@ -31,18 +35,22 @@
 
         public static TSource Do<TSource>(this TSource result, Func<TSource, TSource> function) => function(result);
 
+        public static TSource Do<TSource>(this TSource result, Func<TSource, dynamic> function) => function(result);
+
+        public static TSource Do<TSource>(this TSource result, Func<dynamic, dynamic> function) => function(result);
+
         public static bool Do(Action function)
         {
             function();
 
-            return true;
+            return default;
         }
 
         public static bool Do(this bool ok, Action function)
         {
             function();
 
-            return true;
+            return default;
         }
 
         public static T Do<T>(this T ok, Action function)
