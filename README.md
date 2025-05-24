@@ -3,7 +3,7 @@
 Except.NET is a library that uses a fluent interface and lambda expression to improve the handling of exception.
 
 ## Usage
-You can check `Except.NET/Except.Tests/UseCase.cs` and `Except.NET/Except.Tests/Except.Tests.cs` for more example but here is quick overview :
+You can check `Except.NET/Except.Tests/UseCase.cs` and `Except.NET/Except.Tests/Except.Tests.cs` for more example but here is a quick overview :
 ```C#
 using static System.Excepts.Except;
 
@@ -26,4 +26,6 @@ double Divide(double a, double b)
 }
 
 double result = Try(() => Divide(1, 0)).Catch<Exception>(double.PositiveInfinity); // return double.PositiveInfinity in case of an exception
+
+double result2 = Try(Divide, 1, 0).Catch<Exception>(double.PositiveInfinity); // Use try without using a closure
 ```
