@@ -229,5 +229,89 @@ namespace System.Excepts
 
             return newList;
         }
+
+        public static IEnumerable<TSource> ParallelForEachTry<TSource>(this IEnumerable<TSource> list, Action<TSource> function, int maxDegreeOfParallelism=4)
+        {
+            if (ThreadIdToExceptions.ContainsKey(ThreadId))
+            {
+                ThreadIdToExceptions.Remove(ThreadId);
+            }
+
+            List<Exception> exceptions = new List<Exception>();
+
+            Parallel.ForEach(list,
+                new ParallelOptions
+                {
+                    MaxDegreeOfParallelism = maxDegreeOfParallelism
+                },
+                (TSource obj) =>
+                {
+                    try
+                    {
+                        function(obj);
+                    }
+                    catch (Exception ex)
+                    {
+                        exceptions.Add(ex);
+                    }
+                });
+
+            if (exceptions.Count > 0)
+            {
+                try
+                {
+                    ThreadIdToExceptions.Add(ThreadId, exceptions);
+                }
+                catch
+                {
+                    ThreadIdToExceptions[ThreadId] = exceptions;
+                }
+            }
+
+            return list;
+        }
+
+        public static List<TSource> ParallelForEachTry<TSource>(this List<TSource> list, Func<TSource, TSource> function, int maxDegreeOfParallelism=4)
+        {
+            if (ThreadIdToExceptions.ContainsKey(ThreadId))
+            {
+                ThreadIdToExceptions.Remove(ThreadId);
+            }
+
+            List<TSource> newList = new List<TSource>();
+
+            List<Exception> exceptions = new List<Exception>();
+
+            Parallel.ForEach(list,
+                new ParallelOptions
+                {
+                    MaxDegreeOfParallelism = maxDegreeOfParallelism
+                },
+                (TSource obj) =>
+                {
+                    try
+                    {
+                        newList.Add(function(obj));
+                    }
+                    catch (Exception ex)
+                    {
+                        exceptions.Add(ex);
+                    }
+                });
+
+            if (exceptions.Count > 0)
+            {
+                try
+                {
+                    ThreadIdToExceptions.Add(ThreadId, exceptions);
+                }
+                catch
+                {
+                    ThreadIdToExceptions[ThreadId] = exceptions;
+                }
+            }
+
+            return newList;
+        }
     }
 }

@@ -10,6 +10,15 @@
 
         public static TSource Run<TSource>(this TSource result, Func<dynamic, dynamic> function) => function(result);
 
+        public static TSource Run<TSource>(this TSource result, Delegate function, params dynamic[] args) => (TSource) function.DynamicInvoke(args);
+
+        public static TSource Run<TSource>(Delegate function, params dynamic[] args)
+        {
+            function.DynamicInvoke(args);
+
+            return default(TSource);
+        }
+
         public static bool Run(Action function)
         {
             function();
@@ -38,6 +47,15 @@
         public static TSource Do<TSource>(this TSource result, Func<TSource, dynamic> function) => function(result);
 
         public static TSource Do<TSource>(this TSource result, Func<dynamic, dynamic> function) => function(result);
+
+        public static TSource Do<TSource>(this TSource result, Delegate function, params dynamic[] args) => (TSource) function.DynamicInvoke(args);
+
+        public static TSource Do<TSource>(Delegate function, params dynamic[] args)
+        {
+            function.DynamicInvoke(args);
+
+            return default(TSource);
+        }
 
         public static bool Do(Action function)
         {
@@ -100,7 +118,7 @@
             }
         }
 
-        public static TSource Try<TSource>(Delegate function, params dynamic[] @params)
+        public static TSource Try<TSource>(Delegate function, params dynamic[] args)
         {
             if (ThreadIdToException.ContainsKey(ThreadId))
             {
@@ -109,7 +127,7 @@
 
             try
             {
-                return (TSource) function.DynamicInvoke(@params);
+                return (TSource) function.DynamicInvoke(args);
             }
             catch (Exception ex)
             {
@@ -119,7 +137,7 @@
             }
         }
 
-        public static dynamic Try(Delegate function, params dynamic[] @params)
+        public static dynamic Try(Delegate function, params dynamic[] args)
         {
             if (ThreadIdToException.ContainsKey(ThreadId))
             {
@@ -128,7 +146,7 @@
 
             try
             {
-                return function.DynamicInvoke(@params);
+                return function.DynamicInvoke(args);
             }
             catch (Exception ex)
             {

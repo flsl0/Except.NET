@@ -207,6 +207,14 @@ public class TestTry
 
     [Fact]
     public void TestChainRun() => Run(() => {}).Run(() => {});
+
+    [Fact]
+    public void TestChainRunWithParams() => Run<double>(Lib.Divide, 10, 2).Run(Lib.Divide, 20, 2)
+        .Check(r => r == 10);
+
+    [Fact]
+    public void TestPipingViaRun() => "Hello".Run(s => s + " ").Run(s => s + "World")
+        .Check(s => s == "Hello World");
 }
 
 public class TestForEach
