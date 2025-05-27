@@ -254,6 +254,12 @@ public class TestForEach
         .ForEachTry(_ => throw new Exception())
         .CatchAll(Exceptions.AddRange)
         .Check(Exceptions.GetCountAndClear() > 0, "The list of exceptions shouldn't be empty after catching them all");
+
+    [Fact]
+    public void TestParallelForEachTry() => ArrayOfInt
+        .ParallelForEachTry(_ => throw new Exception())
+        .CatchAll(Exceptions.AddRange)
+        .Check(Exceptions.GetCountAndClear() > 0, "ParallelForEachTry should execute in parallel but handle exception in sync");
 }
 
 public class TestCheck
