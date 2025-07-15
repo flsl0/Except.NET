@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace System.Excepts
 {
@@ -10,9 +11,9 @@ namespace System.Excepts
 
         private static int ThreadId => Thread.CurrentThread.ManagedThreadId + FrameCount;
 
-        private static Dictionary<int, Exception> ThreadIdToException = new Dictionary<int, Exception>();
+        private static IDictionary<int, Exception> ThreadIdToException = new ConcurrentDictionary<int, Exception>();
 
-        private static Dictionary<int, List<Exception>> ThreadIdToExceptions = new Dictionary<int, List<Exception>>();
+        private static IDictionary<int, List<Exception>> ThreadIdToExceptions = new ConcurrentDictionary<int, List<Exception>>();
     }
 
     public abstract class CheckException : Exception
