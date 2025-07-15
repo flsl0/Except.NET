@@ -19,3 +19,24 @@ double Divide(double a, double b)
 }
 
 double result = Try(() => Divide(1, 0)).Catch<Exception>(double.PositiveInfinity); // return double.PositiveInfinity in case of an exception
+
+double result2 = Try(Divide, 1.0, 0.0); // Use try without using a closure
+
+double result3 = Try(Divide, 1.0, 0.0).Catch<Exception>(double.PositiveInfinity); 
+
+double result4 = Try(Divide, 1.0, 0.0).Catch(e => e switch
+{
+    Exception ex => double.PositiveInfinity,
+    _ => double.PositiveInfinity
+});
+
+AnObject anObject = Try(AnObject.Create).Catch(_ => new AnObject());
+
+AnObject anObjectFromString = Try(AnObject.From, "a string").Catch(_ => new AnObject());
+
+class AnObject
+{
+    public static AnObject Create() => throw new Exception();
+
+    public static AnObject From(string str) => throw new Exception();
+}

@@ -92,7 +92,7 @@ public class TestTry
         .Check(r => r == 5, "10/2 should be 5 without handling any exceptions");
 
     [Fact]
-    public void TestTryDivideWithParams() => Try<double>(Lib.Divide, 10, 2)
+    public void TestTryDivideWithParams() => Try(Lib.Divide, 10.0, 2.0)
         .Check(r => r == 5, "10/2 should be 5 without handling any exceptions");
 
     [Fact]
@@ -209,8 +209,16 @@ public class TestTry
     public void TestChainRun() => Run(() => {}).Run(() => {});
 
     [Fact]
-    public void TestChainRunWithParams() => Run<double>(Lib.Divide, 10, 2).Run(Lib.Divide, 20, 2)
+    public void TestChainRunWithParams() => Run(Lib.Divide, 10.0, 2.0).Run(Lib.Divide, 20.0, 2.0)
         .Check(r => r == 10);
+
+    [Fact]
+    public void Test_Chain_Run_With_Params_With_Source() => Run(Lib.Divide, 10.0, 2.0).Run(Lib.Divide, 20.0)
+        .Check(r => r == 4);
+
+    [Fact]
+    public void TestChainRunWithParams2() => Run(Lib.Divide, 10.0, 2.0)
+        .Check(r => r == 5);
 
     [Fact]
     public void TestPipingViaRun() => "Hello".Run(s => s + " ").Run(s => s + "World")
