@@ -1,28 +1,28 @@
-namespace System.Excepts.Generators;
-
-public class CatchAllGenerator : Generator
+namespace System.Excepts.Generators
 {
-    private static readonly object LockObj = new object();
-
-    private static CatchAllGenerator _instance;
-
-    public static CatchAllGenerator Instance
+    public class CatchAllGenerator : Generator
     {
-        get
+        private static readonly object LockObj = new object();
+
+        private static CatchAllGenerator _instance;
+
+        public static CatchAllGenerator Instance
         {
-            lock (LockObj)
+            get
             {
-                if (_instance == null)
+                lock (LockObj)
                 {
-                    _instance = new CatchAllGenerator();
+                    if (_instance == null)
+                    {
+                        _instance = new CatchAllGenerator();
+                    }
                 }
+
+                return _instance;
             }
-
-            return _instance;
         }
-    }
 
-    public override string Template { get; set; } = @"
+        public override string Template { get; set; } = @"
 // Generated
 namespace System.Excepts
 {{
@@ -43,4 +43,5 @@ namespace System.Excepts
         }}
     }}
 }}";
+    }
 }

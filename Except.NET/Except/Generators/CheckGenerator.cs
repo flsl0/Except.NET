@@ -1,28 +1,28 @@
-namespace System.Excepts.Generators;
-
-public class CheckGenerator : Generator
+namespace System.Excepts.Generators
 {
-    private static readonly object LockObj = new object();
-
-    private static CheckGenerator _instance;
-
-    public static CheckGenerator Instance
+    public class CheckGenerator : Generator
     {
-        get
+        private static readonly object LockObj = new object();
+
+        private static CheckGenerator _instance;
+
+        public static CheckGenerator Instance
         {
-            lock (LockObj)
+            get
             {
-                if (_instance == null)
+                lock (LockObj)
                 {
-                    _instance = new CheckGenerator();
+                    if (_instance == null)
+                    {
+                        _instance = new CheckGenerator();
+                    }
                 }
+
+                return _instance;
             }
-
-            return _instance;
         }
-    }
 
-    public override string Template { get; set; } = @"
+        public override string Template { get; set; } = @"
 // Generated
 namespace System.Excepts
 {{
@@ -39,4 +39,5 @@ namespace System.Excepts
         }}
     }}
 }}";
+    }
 }

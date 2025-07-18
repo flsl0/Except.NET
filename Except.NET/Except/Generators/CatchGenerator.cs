@@ -1,36 +1,28 @@
-using System.Reflection;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Emit;
-using System.Excepts;
-
-namespace System.Excepts.Generators;
-
-public class CompilationFailed(EmitResult result) : Exception($"Compilation failed : {string.Join("\r\n", result.Diagnostics.ForEachTry(diag => diag.GetMessage()))}") { }
-
-public class CatchGenerator : Generator
+namespace System.Excepts.Generators
 {
-    private static readonly object LockObj = new object();
-
-    private static CatchGenerator _instance;
-
-    public static CatchGenerator Instance
+    public class CatchGenerator : Generator
     {
-        get
+        private static readonly object LockObj = new object();
+
+        private static CatchGenerator _instance;
+
+        public static CatchGenerator Instance
         {
-            lock (LockObj)
+            get
             {
-                if (_instance == null)
+                lock (LockObj)
                 {
-                    _instance = new CatchGenerator();
+                    if (_instance == null)
+                    {
+                        _instance = new CatchGenerator();
+                    }
                 }
+
+                return _instance;
             }
-
-            return _instance;
         }
-    }
 
-    public override string Template { get; set; } = @"
+        public override string Template { get; set; } = @"
 // Generated
 namespace System.Excepts
 {{
