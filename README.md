@@ -27,7 +27,7 @@ double Divide(double a, double b)
 
 double result = Try(() => Divide(1, 0)).Catch<Exception>(double.PositiveInfinity); // return double.PositiveInfinity in case of an exception
 
-double result2 = Try(Divide, 1.0, 0.0); // Use try without using a closure
+double result2 = Try(Divide, 1.0, 0.0); // Use try without a closure
 
 double result3 = Try(Divide, 1.0, 0.0).Catch<Exception>(double.PositiveInfinity); 
 
