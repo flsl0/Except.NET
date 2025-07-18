@@ -1,8 +1,8 @@
-namespace System.Excepts.Generators;
-
-public class TryGenerator : Generator
+namespace System.Excepts.Generators
 {
-    public override string Template { get; set; } = @"
+    public class TryGenerator : Generator
+    {
+        public override string Template { get; set; } = @"
 // Generated
 public static TSource Try<TSource, {0}>(Func<{0}, TSource> function, {2})
 {{
@@ -22,4 +22,5 @@ public static TSource Try<TSource, {0}>(Func<{0}, TSource> function, {2})
         return default(TSource);
     }}
 }}";
+    }
 }
