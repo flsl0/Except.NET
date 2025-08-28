@@ -22,10 +22,15 @@ double result = Try(() => Divide(1, 0)).Catch<Exception>(double.PositiveInfinity
 
 double result2 = Try(Divide, 1.0, 0.0); // Use try without using a closure
 
-double result3 = Try(Divide, 1.0, 0.0).Catch<Exception>(double.PositiveInfinity); 
+double result3 = Try(Divide, 1.0, 0.0).Catch<Exception>(double.PositiveInfinity);
 
-double result4 = Try(Divide, 1.0, 0.0).Catch(e => e switch
+double result4 = Try(Divide, 1.0, 0.0) // Multiple catch handling by chaining catch methods
+    .Catch<NotImplementedException>(double.PositiveInfinity)
+    .Catch<Exception>(double.PositiveInfinity);
+
+double result5 = Try(Divide, 1.0, 0.0).Catch(e => e switch // Multiple catch handling by using switch expression
 {
+    NotImplementedException ex => double.PositiveInfinity,
     Exception ex => double.PositiveInfinity,
     _ => double.PositiveInfinity
 });
@@ -33,6 +38,8 @@ double result4 = Try(Divide, 1.0, 0.0).Catch(e => e switch
 AnObject anObject = Try(AnObject.Create).Catch(_ => new AnObject());
 
 AnObject anObjectFromString = Try(AnObject.From, "a string").Catch(_ => new AnObject());
+
+FileStream fs = Try(File.Open, "test.txt", FileMode.Open, FileAccess.Read, FileShare.None);
 
 class AnObject
 {
