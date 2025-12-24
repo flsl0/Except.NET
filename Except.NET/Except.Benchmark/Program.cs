@@ -16,6 +16,8 @@ class ExceptBenchmark
 
     bool TryDivide(double a, double b, out double result)
     {
+        result = default;
+
         try
         {
             result = Divide(10.0, 2.0);
