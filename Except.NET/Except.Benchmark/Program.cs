@@ -48,3 +48,11 @@ class ExceptBenchmark
         Try(Divide, 10.0, 2.0).Catch(Throw);
     }
 }
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        BenchmarkRunner.Run<ExceptBenchmark>();
+    }
+}
