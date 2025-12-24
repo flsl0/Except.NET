@@ -55,6 +55,19 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        BenchmarkRunner.Run<ExceptBenchmark>();
+        ManualConfig benchmark_config = ManualConfig.CreateEmpty();
+        benchmark_config.AddColumnProvider(DefaultColumnProviders.Instance);
+        benchmark_config.AddLogger(ConsoleLogger.Default);
+        benchmark_config.AddExporter(DefaultExporters.JsonFull);
+
+        var job = Job.Default.WithCustomBuildConfiguration("Benchmarks");
+        job.Meta.IsDefault = true;
+        benchmark_config.AddJob(job);
+
+        benchmark_config.AddJob(job);
+
+        BenchmarkSwitcher
+            .FromAssembly(typeof(Program).Assembly)
+            .Run(args, benchmark_config);
     }
 }
