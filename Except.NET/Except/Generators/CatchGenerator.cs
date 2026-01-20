@@ -91,28 +91,29 @@ namespace System.Excepts
     }}
 }}";
 
-    public void Load(Type type) => Except.Try(() => _Load(type)).Catch(Console.WriteLine);
+        // public void Load(Type type) => Except.Try(() => _Load(type)).Catch(Console.WriteLine);
 
-    private void _Load(Type type)
-    {
-        CSharpCompilation compilation = CSharpCompilation.Create(
-            assemblyName: Path.GetRandomFileName(),
-            syntaxTrees: new[] { CSharpSyntaxTree.ParseText(Format(type.ToString())) },
-            references: new MetadataReference[]
-            {
-                MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location),
-                MetadataReference.CreateFromFile(Assembly.GetAssembly(type).Location),
-                MetadataReference.CreateFromFile(typeof(Except).Assembly.Location)
-            },
-            options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+        // private void _Load(Type type)
+        // {
+        //     CSharpCompilation compilation = CSharpCompilation.Create(
+        //         assemblyName: Path.GetRandomFileName(),
+        //         syntaxTrees: new[] { CSharpSyntaxTree.ParseText(Format(type.ToString())) },
+        //         references: new MetadataReference[]
+        //         {
+        //             MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+        //             MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location),
+        //             MetadataReference.CreateFromFile(Assembly.GetAssembly(type).Location),
+        //             MetadataReference.CreateFromFile(typeof(Except).Assembly.Location)
+        //         },
+        //         options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
-        using var ms = new MemoryStream();
+        //     using var ms = new MemoryStream();
 
-        compilation.Emit(ms).Check<CompilationFailed>(r => r.Success);
+        //     compilation.Emit(ms).Check<CompilationFailed>(r => r.Success);
 
-        ms.Seek(0, SeekOrigin.Begin);
+        //     ms.Seek(0, SeekOrigin.Begin);
 
-        Assembly.Load(ms.ToArray());
+        //     Assembly.Load(ms.ToArray());
+        // }
     }
 }
