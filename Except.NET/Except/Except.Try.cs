@@ -17,7 +17,7 @@ namespace System.Excepts
             }
             catch (Exception ex)
             {
-                ThreadIdToException.Add(ThreadId, ex);
+                ThreadIdToException[ThreadId] = ex;
 
                 return ex;
             }
@@ -38,7 +38,7 @@ namespace System.Excepts
             }
             catch (Exception ex)
             {
-                ThreadIdToException.Add(ThreadId, ex);
+                ThreadIdToException[ThreadId] = ex;
 
                 return default(TSource);
             }
@@ -57,7 +57,7 @@ namespace System.Excepts
             }
             catch (Exception ex)
             {
-                ThreadIdToException.Add(ThreadId, ex);
+                ThreadIdToException[ThreadId] = ex;
 
                 return default(TSource);
             }
@@ -77,7 +77,7 @@ namespace System.Excepts
             }
             catch (Exception ex)
             {
-                ThreadIdToException.Add(ThreadId, ex);
+                ThreadIdToException[ThreadId] = ex;
 
                 return default(TSource);
             }
@@ -97,7 +97,7 @@ namespace System.Excepts
             }
             catch (Exception ex)
             {
-                ThreadIdToException.Add(ThreadId, ex);
+                ThreadIdToException[ThreadId] = ex;
 
                 return default(TSource);
             }
@@ -117,7 +117,7 @@ namespace System.Excepts
             }
             catch (Exception ex)
             {
-                ThreadIdToException.Add(ThreadId, ex);
+                ThreadIdToException[ThreadId] = ex;
 
                 return default(TSource);
             }
@@ -137,7 +137,7 @@ namespace System.Excepts
             }
             catch (Exception ex)
             {
-                ThreadIdToException.Add(ThreadId, ex);
+                ThreadIdToException[ThreadId] = ex;
 
                 return default(TSource);
             }
@@ -157,7 +157,7 @@ namespace System.Excepts
             }
             catch (Exception ex)
             {
-                ThreadIdToException.Add(ThreadId, ex);
+                ThreadIdToException[ThreadId] = ex;
 
                 return default(TSource);
             }
@@ -177,7 +177,7 @@ namespace System.Excepts
             }
             catch (Exception ex)
             {
-                ThreadIdToException.Add(ThreadId, ex);
+                ThreadIdToException[ThreadId] = ex;
 
                 return default(TSource);
             }
@@ -197,7 +197,7 @@ namespace System.Excepts
             }
             catch (Exception ex)
             {
-                ThreadIdToException.Add(ThreadId, ex);
+                ThreadIdToException[ThreadId] = ex;
 
                 return default(TSource);
             }
@@ -217,7 +217,7 @@ namespace System.Excepts
             }
             catch (Exception ex)
             {
-                ThreadIdToException.Add(ThreadId, ex);
+                ThreadIdToException[ThreadId] = ex;
 
                 return default(TSource);
             }
@@ -237,7 +237,7 @@ namespace System.Excepts
             }
             catch (Exception ex)
             {
-                ThreadIdToException.Add(ThreadId, ex);
+                ThreadIdToException[ThreadId] = ex;
 
                 return default(TSource);
             }
@@ -257,7 +257,7 @@ namespace System.Excepts
             }
             catch (Exception ex)
             {
-                ThreadIdToException.Add(ThreadId, ex);
+                ThreadIdToException[ThreadId] = ex;
 
                 return default(TSource);
             }
@@ -277,7 +277,7 @@ namespace System.Excepts
             }
             catch (Exception ex)
             {
-                ThreadIdToException.Add(ThreadId, ex);
+                ThreadIdToException[ThreadId] = ex;
 
                 return default(TSource);
             }
@@ -297,7 +297,7 @@ namespace System.Excepts
             }
             catch (Exception ex)
             {
-                ThreadIdToException.Add(ThreadId, ex);
+                ThreadIdToException[ThreadId] = ex;
 
                 return default(TSource);
             }
@@ -317,7 +317,7 @@ namespace System.Excepts
             }
             catch (Exception ex)
             {
-                ThreadIdToException.Add(ThreadId, ex);
+                ThreadIdToException[ThreadId] = ex;
 
                 return default(TSource);
             }
@@ -337,7 +337,7 @@ namespace System.Excepts
             }
             catch (Exception ex)
             {
-                ThreadIdToException.Add(ThreadId, ex);
+                ThreadIdToException[ThreadId] = ex;
 
                 return default(TSource);
             }
@@ -357,7 +357,7 @@ namespace System.Excepts
             }
             catch (Exception ex)
             {
-                ThreadIdToException.Add(ThreadId, ex);
+                ThreadIdToException[ThreadId] = ex;
 
                 return default(TSource);
             }
