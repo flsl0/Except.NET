@@ -75,6 +75,7 @@ namespace SourceGenerator
             var temp = context.SemanticModel.GetSymbolInfo(invocation);
 
             var symbol = context.SemanticModel.GetSymbolInfo(invocation).Symbol as IMethodSymbol;
+
             var type = context.SemanticModel.GetTypeInfo(invocation);
 
             var test2 = context.SemanticModel.GetDeclaredSymbol(invocation);
