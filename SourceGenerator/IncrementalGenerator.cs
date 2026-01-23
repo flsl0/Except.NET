@@ -39,10 +39,10 @@ namespace SourceGenerator
     }
 
     [Generator]
-	public class IncrementalGenerator : IIncrementalGenerator
-	{
-		public void Initialize(IncrementalGeneratorInitializationContext context)
-		{
+    public class IncrementalGenerator : IIncrementalGenerator
+    {
+        public void Initialize(IncrementalGeneratorInitializationContext context)
+        {
 #if DEBUG
             System.Diagnostics.Debugger.Launch();
 #endif
@@ -71,6 +71,8 @@ namespace SourceGenerator
             var invocation = (InvocationExpressionSyntax)context.Node;
 
             var invocationString = invocation.ToString();
+
+            var temp = context.SemanticModel.GetSymbolInfo(invocation);
 
             var symbol = context.SemanticModel.GetSymbolInfo(invocation).Symbol as IMethodSymbol;
             var type = context.SemanticModel.GetTypeInfo(invocation);
@@ -121,8 +123,6 @@ namespace SourceGenerator
             {
 
             }
-
-            throw new NotImplementedException();
         }
 
         record CallInfo(

@@ -1,12 +1,16 @@
-﻿using ConsoleApp;
-using System;
-using System.Diagnostics;
-using System.Reflection.PortableExecutable;
-using System.Runtime.CompilerServices;
+﻿using System;
+using System.Linq;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using SourceGenerator;
 
-namespace ConsoleApp
+class Program
 {
-    static class Program
+    static void Main()
+    {
+        var source = @"
+namespace Demo {
+    public partial class Foo
     {
         public static extern TSource Try<TSource, T1, T2>(Func<T1, T2, TSource> function, T1 arg1, T2 arg2);
 
@@ -23,7 +27,7 @@ namespace ConsoleApp
 
         static double Divide(double a, double b) => a / b;
 
-        static void Main(string[] args)
+        static void Test()
         {
             // Try(Divide, 10.0, 5.0).Catch<Exception>(double.PositiveInfinity);
 
@@ -42,26 +46,37 @@ namespace ConsoleApp
             var test = 12.ToString();
         }
     }
-}
+}";
 
-namespace Interceptors
-{
-    public static class CodeInterceptor
-    {
-        static Func<dynamic> test;
+        var syntaxTree = CSharpSyntaxTree.ParseText(source);
 
-        [InterceptsLocation("""C:\Users\void\Documents\dev\SourceGeneratorTemplate-main\ConsoleApp\Program.cs""", line: 36, character: 28)]
-        public static TSource Try<TSource, T1, T2>(Func<T1, T2, TSource> function, T1 arg1, T2 arg2)
+        var refs = AppDomain.CurrentDomain.GetAssemblies()
+            .Where(a => !a.IsDynamic && !string.IsNullOrWhiteSpace(a.Location))
+            .Select(a => MetadataReference.CreateFromFile(a.Location))
+            .Cast<MetadataReference>();
+
+        var compilation = CSharpCompilation.Create(
+            assemblyName: "Demo",
+            syntaxTrees: new[] { syntaxTree },
+            references: refs,
+            options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+        IIncrementalGenerator generator = new IncrementalGenerator();
+        var driver = CSharpGeneratorDriver.Create(generator);
+
+        driver = (CSharpGeneratorDriver)driver.RunGeneratorsAndUpdateCompilation(compilation, out var updated, out var diags);
+
+        Console.WriteLine("Diagnostics:");
+        foreach (var d in diags) Console.WriteLine(d);
+
+        var runResult = driver.GetRunResult();
+        foreach (var result in runResult.Results)
         {
-            test = () => function(arg1, arg2)!;
-
-            return test();
+            foreach (var generated in result.GeneratedSources)
+            {
+                Console.WriteLine($"=== {generated.HintName} ===");
+                Console.WriteLine(generated.SourceText.ToString());
+            }
         }
-
-        /*[InterceptsLocation("""C:\Users\void\Documents\dev\SourceGeneratorTemplate-main\ConsoleApp\Program.cs""", line: 37, character: 18)]
-        public static double Catch<T>(this double result, Action<Exception> function)
-        {
-            return default;
-        }*/
     }
 }

@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <ImplicitUsing>enable</ImplicitUsing>
     <Nullable>enable</Nullable>
-	<Features>InterceptorsPreview</Features>
-	<InterceptorsNamespaces>$(InterceptorsNamespaces);Microsoft.AspNetCore.Http.Generated;Interceptors</InterceptorsNamespaces>
+    <Features>InterceptorsPreview</Features>
+    <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Interceptors</InterceptorsPreviewNamespaces>
   </PropertyGroup>
 
   <ItemGroup>
